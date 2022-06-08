@@ -183,22 +183,19 @@ int main() {
 	Mesh wall(verts, ind, tex);
 
 	// Floor
-	Shader shaderProgram2("default.vert", "default.frag");
 	std::vector <Vertex> verts2(vertices2, vertices2 + sizeof(vertices2) / sizeof(Vertex));
 	std::vector <GLuint> ind2(indices2, indices2 + sizeof(indices2) / sizeof(GLuint));
 	std::vector <Texture> tex2(textures2, textures2 + sizeof(textures2) / sizeof(Texture));
 	// Create floor mesh
 	Mesh floor(verts2, ind2, tex2);
 
-	Shader objShader("default.vert", "default.frag");
 	std::vector <Vertex> verts3;
 	std::vector <GLuint> ind3;
 	std::vector <Texture> tex3(textures3, textures3 + sizeof(textures3) / sizeof(Texture));
-	Object cat("MiltonDesk.OBJ");
-	cat.prep(verts3, ind3);
-	Mesh neko(verts3, ind3, tex3);
+	Object desk("MiltonDesk.OBJ");
+	desk.prep(verts3, ind3);
+	Mesh table(verts3, ind3, tex3);
 
-	Shader obj2("default.vert", "default.frag");
 	std::vector <Vertex> verts4;
 	std::vector <GLuint> ind4;
 	std::vector <Texture> tex4(textures4, textures4 + sizeof(textures4) / sizeof(Texture));
@@ -206,7 +203,6 @@ int main() {
 	bed.prep(verts4, ind4);
 	Mesh sleep(verts4, ind4, tex4);
 
-	Shader windows("default.vert", "default.frag");
 	std::vector <Vertex> wvert;
 	std::vector <GLuint> wind;
 	std::vector <Texture> wtex(textures5, textures5 + sizeof(textures4) / sizeof(Texture));
@@ -235,11 +231,8 @@ int main() {
 	Shader shadowCubeMapProgram("shadowCubeMap.vert", "shadowCubeMap.frag", "shadowCubeMap.geom");
 
 	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	glm::vec3 lightPos = glm::vec3(1.0f, 6.0f, 10.0f);
+	glm::vec3 lightPos = glm::vec3(0.0f, 9.5f, 10.0f);
 
-	shaderProgram.Activate();
-	glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 	frameBufferProgram.Activate();
 	glUniform1i(glGetUniformLocation(frameBufferProgram.ID, "screenTexture"), 0);
 
@@ -422,7 +415,7 @@ int main() {
 		wall.Draw(shadowCubeMapProgram, camera, roomModel, lightPos, lightColor, 1);
 		windf.Draw(shadowCubeMapProgram, camera, windModel, lightPos, lightColor, 1);
 		sleep.Draw(shadowCubeMapProgram, camera, objModel2, lightPos, lightColor, 1);
-		neko.Draw(shadowCubeMapProgram, camera, objModel, lightPos, lightColor, 1);
+		table.Draw(shadowCubeMapProgram, camera, objModel, lightPos, lightColor, 1);
 		cube.Draw(shadowCubeMapProgram, camera, cubeModel, lightPos, lightColor, 1);
 		
 
@@ -455,7 +448,7 @@ int main() {
 		wall.Draw(shaderProgram, camera, roomModel, lightPos, lightColor, 1);
 		floor.Draw(shaderProgram, camera, roomModel, lightPos, lightColor, 1);
 		sleep.Draw(shaderProgram, camera, objModel2, lightPos, lightColor, 1);
-		neko.Draw(shaderProgram, camera, objModel, lightPos, lightColor, 1);
+		table.Draw(shaderProgram, camera, objModel, lightPos, lightColor, 1);
 		windf.Draw(shaderProgram, camera, windModel, lightPos, lightColor, 1);
 		cube.Draw(shaderProgram, camera, cubeModel, lightPos, lightColor, 1);
 		light.Draw(lightShader, camera, lightModel, lightPos, lightColor, 0);
@@ -477,10 +470,6 @@ int main() {
 
 	// Delete all the objects we've created
 	shaderProgram.Delete();
-	shaderProgram2.Delete();
-	objShader.Delete();
-	obj2.Delete();
-	windows.Delete();
 	lightShader.Delete();
 	glDeleteFramebuffers(1, &FBO);
 	// Delete window before ending the program

@@ -35,7 +35,7 @@ vec4 pointLight(){
 
 	// intensity of light with respect to distance
 	float dist = length(lightVec);
-	float a = 0.0003f;
+	float a = 0.001f;
 	float b = 0.00002f;
 	float inten = 1.0f/ (a * dist * dist + b * dist + 1.0f);
 
@@ -54,7 +54,7 @@ vec4 pointLight(){
 		float specularLight = 0.50f;
 		vec3 viewDirection = normalize(camPos - crntPos);
 		vec3 halfwayVec = normalize(viewDirection + lightDirection);
-		float specAmount = pow(max(dot(normal, halfwayVec), 0.0f), 16);
+		float specAmount = pow(max(dot(normal, halfwayVec), 0.1f), 16);
 		specular = specAmount * specularLight;
 	};
 
@@ -77,7 +77,7 @@ vec4 pointLight(){
 				// Remember that we divided by the farPlane?
 				// Also notice how the currentDepth is not in the range [0, 1]
 				closestDepth *= farPlane;
-				if (currentDepth > closestDepth)
+				if (currentDepth > closestDepth + bias)
 					shadow += 1.0f;     
 		    }    
 		}
